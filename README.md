@@ -1,5 +1,7 @@
 # poc-python
 
+[wiki](https://github.com/mnhmilu/poc-python/wiki/Class-Example)
+
 ### Basic
 
 To package and deploy Python code for a RESTful API on a server, you can follow these general steps:
