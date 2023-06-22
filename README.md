@@ -104,4 +104,112 @@ python manage.py runserver 0.0.0.0:8000
 
 This example provides a basic demonstration of packaging and deploying a Django API to a server. However, in a production environment, you would typically configure a more robust server setup with a production-grade web server like Nginx or Apache and use a WSGI server like Gunicorn or uWSGI to serve your Django application. Additionally, you might want to consider using a database server like PostgreSQL or MySQL. The exact steps and configurations will vary based on your specific needs and server environment.
 
+---
 
+Certainly! Here's a complete example of a Django REST API with related source code files:
+
+1. **Organize your code**: Create a directory structure for your Django project. For example:
+```
+my_api/
+   |- my_api/
+   |   |- __init__.py
+   |   |- settings.py
+   |   |- urls.py
+   |   |- wsgi.py
+   |- api/
+   |   |- __init__.py
+   |   |- models.py
+   |   |- serializers.py
+   |   |- views.py
+   |- manage.py
+```
+
+2. **Create a virtual environment**: Open a terminal and navigate to the `my_api` directory. Create a virtual environment using `venv`:
+```
+python3 -m venv venv
+```
+
+3. **Install dependencies**: Activate the virtual environment and install Django using `pip`:
+```
+source venv/bin/activate
+pip install django
+```
+
+4. **Choose a web server**: Django comes with its built-in development server. However, for production deployments, you might consider using a server like Gunicorn or uWSGI.
+
+5. **Develop your API**:
+In the `my_api/settings.py` file, make sure the following configurations are set correctly:
+
+```python
+INSTALLED_APPS = [
+    ...
+    'api',
+    ...
+]
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
+```
+
+Create the `api/models.py` file and add the following code to define a simple model:
+```python
+from django.db import models
+
+class Book(models.Model):
+    title = models.CharField(max_length=100)
+    author = models.CharField(max_length=100)
+```
+
+Create the `api/serializers.py` file and add the following code to define a serializer for the `Book` model:
+```python
+from rest_framework import serializers
+from .models import Book
+
+class BookSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Book
+        fields = '__all__'
+```
+
+Create the `api/views.py` file and add the following code to define a view for the `Book` model:
+```python
+from rest_framework import viewsets
+from .models import Book
+from .serializers import BookSerializer
+
+class BookViewSet(viewsets.ModelViewSet):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+```
+
+Update the `my_api/urls.py` file to include the API URLs:
+```python
+from django.urls import include, path
+from rest_framework import routers
+from api.views import BookViewSet
+
+router = routers.DefaultRouter()
+router.register(r'books', BookViewSet)
+
+urlpatterns = [
+    path('api/', include(router.urls)),
+]
+```
+
+6. **Test locally**: Run the Django development server locally and test your API by running the following command in the terminal:
+```
+python manage.py runserver
+```
+You can now access the API at `http://localhost:8000/api/books/` to perform CRUD operations on the `Book` model.
+
+Note: Make sure to run the following commands to apply the initial database migrations:
+```
+python manage.py makemigrations
+python manage.py migrate
+```
+
+This example provides a complete Django project structure with a simple REST API for managing books. However, for a production environment, you would need to configure additional settings, such as static file serving, secure secret key storage, and database connections. Additionally, you would typically set up a more robust server setup with a production-grade web server like Nginx or Apache and use a WSGI server like Gunicorn or uWSGI to serve your Django application.
