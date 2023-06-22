@@ -213,3 +213,25 @@ python manage.py migrate
 ```
 
 This example provides a complete Django project structure with a simple REST API for managing books. However, for a production environment, you would need to configure additional settings, such as static file serving, secure secret key storage, and database connections. Additionally, you would typically set up a more robust server setup with a production-grade web server like Nginx or Apache and use a WSGI server like Gunicorn or uWSGI to serve your Django application.
+
+---
+
+Yes, you can create a `requirements.txt` file to specify the dependencies needed for your Django project. This file should reside in the root directory of your project (`my_api` directory in this example). Here's an example `requirements.txt` file for a Django project with the REST framework:
+
+```
+Django==3.2.7
+djangorestframework==3.12.4
+```
+
+In this example, `Django` is the version of Django you want to install, and `djangorestframework` is the Django REST framework version. You can add more dependencies to the file as needed, each on a separate line.
+
+To install the dependencies, you can run the following command in your virtual environment after activating it:
+
+```
+pip install -r requirements.txt
+```
+
+This command will read the `requirements.txt` file and install all the specified dependencies. It ensures that all the required packages are installed in the correct versions.
+
+Including a `requirements.txt` file is a good practice as it helps to manage and reproduce the same environment across different machines or deployments.
+
